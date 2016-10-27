@@ -1,0 +1,33 @@
+{
+  "name": "fe-exercise-vimeo-videos",
+  "version": "1.0.0",
+  "description": "Coding exercise done for an application to a Frontend Developer position. Makes use of Vimeo Developer API.",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "webpack-dev-server",
+      "build": "webpack --progress --colors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joseduraes/fe-exercise-vimeo-videos.git"
+  },
+  "author": "José Durães <jdmduraes@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joseduraes/fe-exercise-vimeo-videos/issues"
+  },
+  "homepage": "https://github.com/joseduraes/fe-exercise-vimeo-videos#readme",
+  "devDependencies": {
+    "babel-core": "^6.18.0",
+    "babel-loader": "^6.2.6",
+    "babel-preset-es2015": "^6.18.0",
+    "ts-loader": "^0.9.5",
+    "typescript": "^2.0.6",
+    "typings": "^1.4.0",
+    "vue": "^2.0.3",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2",
+    "whatwg-fetch": "^1.0.0"
+  }
+}
