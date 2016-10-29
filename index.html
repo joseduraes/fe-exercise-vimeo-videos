@@ -42,14 +42,14 @@
                     <nav aria-label="...">
                         <ul class="pager">
                             <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
-                            <li>X-Y of Z results.</li>
+                            <li>X-Y of {{ results.total }} results.</li>
                             <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
                         </ul>
                     </nav>
                 </div>
             </nav>
             <section class="content">
-                <div class="row">
+                <div class="row" v-for="(item, index) in results.data">
                     <div class="media">
                     <div class="media-left">
                         <a href="#">
@@ -57,10 +57,10 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading"><a href="#">Media heading</a></h4>
+                        <h4 class="media-heading"><a href="#">{{ item.name }}</a></h4>
                         <p><a href="#">John Doe<a/><em></p>
-                        <p>A fancy video description goes here.</p>
-                        <p>X times played, Z comments, W likes</p>
+                        <p>{{ item.description }}</p>
+                        <p>Times played: {{ item.stats.plays }}. Comments: {{ item.metadata.connections.comments.total }}. Likes: {{ item.metadata.connections.likes.total }}</p>
                     </div>
                     </div>
                 </div>

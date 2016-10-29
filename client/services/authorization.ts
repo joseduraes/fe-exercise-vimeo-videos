@@ -1,14 +1,9 @@
-interface AccessTokenResponse {
+export interface AccessTokenResponse {
     access_token: string
     token_type: string
 }
 
-export interface Authorization {
-    
-    getUnauthenticatedAccessToken(): Promise<AccessTokenResponse>
-}
-
-class VimeoAuthorizationService implements Authorization {
+class VimeoAuthorizationService {
 
     private clientId: string;
     private clientSecret: string;

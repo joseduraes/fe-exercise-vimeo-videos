@@ -1,10 +1,16 @@
 import * as Vue from 'vue';
 import { Videos } from './services/videos';
+import { VideosGetResponse } from './models/VideosGetResponse';
 
 type selector = string;
 
 interface Templates {
     videoSearch: selector
+}
+
+interface AppModel {
+    isLoading: boolean
+    results: VideosGetResponse
 }
 
 export class App {
@@ -24,13 +30,16 @@ export class App {
             el: this.root,
             template: this.templates.videoSearch,
             data: {
-            },
+                isLoading: false,
+                results: {
+                    total: 0
+                }
+            } as AppModel,
             methods: {
                 
                 search: () => {
-                    console.log('search');
                     Videos.get().then((response) => {
-                        console.log(response);
+                        this.app.$data['results'] = response;
                     });
                 }
             }
