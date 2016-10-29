@@ -2,7 +2,73 @@
 
 <head>
     <title>Vimeo Video Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/_assets/main.css">
+    <script type="x-template" id="video-search-template">
+        <div class="container">
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <form class="navbar-form navbar-left">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search in video description..." />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">Go</button>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <span for="selectMaxResults">Results Per Page</span>
+                                        <select class="form-control" id="selectMaxResults">
+                                            <option>10</option>
+                                            <option>20</option>
+                                            <option>50</option>
+                                        </select>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                        <input type="checkbox"> Filter by users with > 10 likes
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <nav class="navbar navbar-default navbar-fixed-bottom">
+                <div class="container-fluid">
+                    <nav aria-label="...">
+                        <ul class="pager">
+                            <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
+                            <li>X-Y of Z results.</li>
+                            <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </nav>
+            <section class="content">
+                <div class="row">
+                    <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                        <img class="media-object" src="http://placehold.it/64x64s" alt="...">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><a href="#">Media heading</a></h4>
+                        <p><a href="#">John Doe<a/><em></p>
+                        <p>A fancy video description goes here.</p>
+                        <p>X times played, Z comments, W likes</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="x-template" id="video-search-results-template">
+    </script>
     <script type="text/javascript" charset="utf-8" src="/_assets/bundle.js" defer async></script>
 </head>
 
