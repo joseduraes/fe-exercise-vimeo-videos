@@ -1,4 +1,5 @@
 import * as Vue from 'vue';
+import { Videos } from './services/videos';
 
 type selector = string;
 
@@ -23,7 +24,16 @@ export class App {
             el: this.root,
             template: this.templates.videoSearch,
             data: {
-            } 
+            },
+            methods: {
+                
+                search: () => {
+                    console.log('search');
+                    Videos.get().then((response) => {
+                        console.log(response);
+                    });
+                }
+            }
         });
     }
 }
