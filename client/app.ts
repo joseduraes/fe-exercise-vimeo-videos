@@ -32,7 +32,6 @@ export class App {
     constructor(params:{root: selector, templates: Templates}){
         this.root = params.root; 
         this.templates = params.templates;
-
         this.debouncedFetchResults = lodash.debounce(this.fetchResults, 100);
         this.init();
         this.search();
@@ -87,65 +86,67 @@ export class App {
         });
     }
 
+    get appModel(){
+        return this.app.$data as AppModel;
+    }
+
     private search = (page?: number, noScroll?: boolean) => {
 
-        if (this.app.$data['resultsBackend'] == 'mock'){
+        if (this.appModel.resultsBackend == 'mock'){
             return this.fetchResults(VideosMockApi, page, noScroll);
         }
         return this.debouncedFetchResults(VideosApi, page, noScroll);
     }
 
     private fetchResults(videoSrv: VideosApiSpec, page: number, noScroll: boolean){
-        this.app.$data['isLoading'] = true; 
-        this.app.$data['errorMessage'] = ''; 
+        this.appModel.isLoading = true; 
+        this.appModel.errorMessage = ''; 
         
         return videoSrv.getVideos({
-            per_page: this.app.$data['resultsPerPage'],
-            query: this.app.$data['filterSearchTerm'] || null,
+            per_page: this.appModel.resultsPerPage,
+            query: this.appModel.filterSearchTerm || null,
             page: page || null,
             direction: 'desc',
             },
-            this.app.$data['filterPopularUsers']
+            this.appModel.filterPopularUsers
         ).then((response) => {
-            this.app.$data['results'] = response;
-            this.handleResultsFinishedLoading(noScroll);
+            this.handleResultsFinishedLoading(response, noScroll);
         }).catch((err) => {
-            this.app.$data['results'] = [];
-            this.app.$data['errorMessage'] = err;
-            this.handleResultsFinishedLoading();
+            this.appModel.errorMessage = err;
+            this.handleResultsFinishedLoading(null);
         });
     }
 
-    private handleResultsFinishedLoading = (noScroll?: boolean) => {
-        this.app.$data['isLoading'] = false; 
+    private handleResultsFinishedLoading = (response: VideosGetResponse, noScroll?: boolean) => {
+        this.appModel.results = response;
+        this.appModel.isLoading = false; 
+
         if (!noScroll){
             window.scrollTo(0, 0);
         }
     }
 
     private goToPreviousPage = () => {
-        const results: VideosGetResponse = this.app.$data['results'];
-        const page = results.page;
+        const page = this.appModel.results.page;
         if (page && this.hasPreviousPage()){
             this.search(page-1);
         }
     }
 
     private goToNextPage = () => {
-        const results: VideosGetResponse = this.app.$data['results'];
-        const page = results.page;
+        const page = this.appModel.results.page;
         if (page && this.hasNextPage()){
             this.search(page+1);
         }
     }
 
     private hasPreviousPage = () => {
-        const results = this.app.$data['results'] as VideosGetResponse;
+        const results = this.appModel.results;
         return results && results.paging && results.paging.previous;
     }
 
     private hasNextPage = () => {
-        const results = this.app.$data['results'] as VideosGetResponse;
+        const results = this.appModel.results;
         return results && results.paging && results.paging.next;
     }
 }

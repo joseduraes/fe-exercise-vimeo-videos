@@ -76,7 +76,11 @@
                             <h4 class="media-heading"><a v-bind:href="item.link" target="_blank">{{ item.name }}</a></h4>
                             <p><a v-bind:href="item.user.link" target="_blank">John Doe<a/><em></p>
                             <p>{{ item.description }}</p>
-                            <p>Times played: {{ item.stats.plays }}. Comments: {{ item.metadata.connections.comments.total }}. Likes: {{ item.metadata.connections.likes.total }}</p>
+                            <p>
+                                Times played: <strong>{{ item.stats.plays }}</strong>.
+                                Comments: <strong>{{ item.metadata.connections.comments.total }}</strong>.
+                                Likes: <strong>{{ item.metadata.connections.likes.total }}</strong>
+                             </p>
                         </div>
                         </div>
                     </div>

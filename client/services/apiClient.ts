@@ -53,6 +53,7 @@ class ApiClientService {
             this.authenticationInProgress = null;
             throw(err)
         });
+        
         return this.authenticationInProgress;
     }
   
