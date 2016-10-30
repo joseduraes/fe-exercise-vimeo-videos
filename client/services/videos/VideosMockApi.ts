@@ -45,13 +45,13 @@ class Videos implements VideosApiSpec {
         const start = (page - 1) * perPage;
         const end = page * perPage;
         const paginatedData = data.slice(start, end);
-        
+
         return {
             total: data.length,
             page: page,
             paging: {
                 next: data.length > end ? 'http://fakenexturl' : null,
-                previous: data.length < start ? 'http://fakenexturl' : null
+                previous: start >= perPage ? 'http://fakenexturl' : null
             },
             data: paginatedData
         }

@@ -2,6 +2,7 @@ import * as Vue from 'vue';
 import { VideosMockApi as Videos } from './services/videos/VideosMockApi';
 import { VideosGetResponse } from './models/VideosGetResponse';
 import { VideoInfo } from './models/VideoInfo';
+import * as lodash from 'lodash';
 
 type selector = string;
 
@@ -26,7 +27,9 @@ export class App {
     constructor(params:{root: selector, templates: Templates}){
         this.root = params.root; 
         this.templates = params.templates;
+
         this.init();
+        this.search();
     }
 
     private init(){
@@ -60,6 +63,9 @@ export class App {
                 }
             },
             watch: {
+                filterSearchTerm: (val, oldVal) => {
+                    return this.search();
+                },
                 filterPopularUsers: (val, oldVal) => {
                     return this.search();
                 },

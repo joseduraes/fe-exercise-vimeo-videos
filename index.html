@@ -40,10 +40,10 @@
             <nav class="navbar navbar-default navbar-fixed-bottom">
                 <div class="container-fluid">
                     <nav aria-label="pagination">
+                        <span class="text-center">Search results: <strong>{{ results.total }}</strong>. Page <strong>{{ results.page }}</strong></span>
                         <ul class="pager"  v-if="results && results.paging">
-                            <li v-if='results && results.paging && results.paging.previous' class="previous"><button class="btn btn-primary" v-bind:disabled="isLoading" v-on:click="goToPreviousPage"><span aria-hidden="true">&larr;</span> Previous</button></li>
-                            <li>X-Y of {{ results.total }} results.</li>
-                            <li v-if='results && results.paging && results.paging.next' class="next"><button class="btn btn-primary" v-bind:disabled="isLoading" v-on:click="goToNextPage">Next <span aria-hidden="true">&rarr;</span></button></li>
+                            <li v-if='results && results.paging && results.paging.previous' class="previous"><button class="btn btn-sm btn-primary" v-bind:disabled="isLoading" v-on:click="goToPreviousPage"><span aria-hidden="true">&larr;</span> Previous</button></li>
+                            <li v-if='results && results.paging && results.paging.next' class="next"><button class="btn btn-sm btn-primary" v-bind:disabled="isLoading" v-on:click="goToNextPage">Next <span aria-hidden="true">&rarr;</span></button></li>
                         </ul>
                     </nav>
                 </div>
@@ -56,13 +56,13 @@
                     <div class="row" v-for="(item, index) in results.data" >
                         <div class="media">
                         <div class="media-left">
-                            <a href="#">
-                            <img class="media-object" src="http://placehold.it/64x64s" alt="...">
+                            <a v-bind:href="item.user.link" target="_blank">
+                            <img class="media-object search_results__author_image" v-bind:src="item.user.pictures && item.user.pictures.sizes && item.user.pictures.sizes[1] && item.user.pictures.sizes[1].link" v-bind:alt="item.user.name">
                             </a>
                         </div>
                         <div class="media-body">
-                            <h4 class="media-heading"><a href="#">{{ item.name }}</a></h4>
-                            <p><a href="#">John Doe<a/><em></p>
+                            <h4 class="media-heading"><a v-bind:href="item.link" target="_blank">{{ item.name }}</a></h4>
+                            <p><a v-bind:href="item.user.link" target="_blank">John Doe<a/><em></p>
                             <p>{{ item.description }}</p>
                             <p>Times played: {{ item.stats.plays }}. Comments: {{ item.metadata.connections.comments.total }}. Likes: {{ item.metadata.connections.likes.total }}</p>
                         </div>
