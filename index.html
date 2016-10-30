@@ -12,15 +12,15 @@
                         <div class="col-xs-12 col-md-12">
                             <form class="navbar-form navbar-left">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search in video description..." />
+                                    <input type="text" class="form-control" placeholder="Search in video description..." v-model="filterSearchTerm"/>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" v-on:click="search">Go</button>
+                                        <button class="btn btn-default" type="button" v-on:click="search" v-bind:disabled="isLoading">Go</button>
                                     </span>
                                 </div>
                                 <div class="form-group">
                                     <div class="checkbox">
                                         <span for="selectMaxResults">Results Per Page</span>
-                                        <select class="form-control" id="selectMaxResults">
+                                        <select class="form-control" id="selectMaxResults" v-model="resultsPerPage">
                                             <option>10</option>
                                             <option>20</option>
                                             <option>50</option>
@@ -28,7 +28,7 @@
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                        <input type="checkbox"> Filter by users with > 10 likes
+                                        <input type="checkbox" v-model="filterPopularUsers"> Filter by users with > 10 likes
                                         </label>
                                     </div>
                                 </div>
@@ -41,9 +41,9 @@
                 <div class="container-fluid">
                     <nav aria-label="...">
                         <ul class="pager">
-                            <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
+                            <li v-if='results && results.paging && results.paging.previous' class="previous"><button class="btn btn-primary" v-bind:disabled="isLoading" v-on:click="goToPreviousPage"><span aria-hidden="true">&larr;</span> Previous</button></li>
                             <li>X-Y of {{ results.total }} results.</li>
-                            <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+                            <li v-if='results && results.paging && results.paging.next' class="next"><button class="btn btn-primary" v-bind:disabled="isLoading" v-on:click="goToNextPage">Next <span aria-hidden="true">&rarr;</span></button></li>
                         </ul>
                     </nav>
                 </div>

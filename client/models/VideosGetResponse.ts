@@ -7,10 +7,10 @@ export class VideosGetResponse {
     paging: Paging
     
     public hasNextPage(): boolean {
-        return this.page < this.total
+        return !!this.paging.next
     }
 
     public hasPreviousPage(): boolean {
-        return this.page > 1
+        return !!this.paging.previous
     }
 }

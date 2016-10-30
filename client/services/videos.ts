@@ -11,7 +11,14 @@ class VideosService {
     }
 
     public get(params?: VideosGetRequest): Promise<VideosGetResponse>{
-        return ApiClient.makeRequest(this.baseUrl, {method: 'get', requiresAuth: true});
+        
+        return ApiClient.makeRequest(
+            this.baseUrl, {
+                query: Object.assign({}, params),
+                method: 'get',
+                requiresAuth: true
+            }
+        );
     }
 }
 

@@ -4,6 +4,8 @@ import { Videos } from './videos';
 interface RequestParams {
     requiresAuth: boolean
     method: string
+    body?: string 
+    query?: {[key: string]: string}
 }
 
 class ApiClientService {
@@ -22,13 +24,18 @@ class ApiClientService {
                 () => { return this.makeRequest(url, params) })
         }
 
+        if (params.query){
+            const queryString = this.buildQueryString(params.query);
+            url = queryString.length > 0 ? `${url}?${queryString}` : url;
+        }
+
         return window.fetch(url, {
             method: params.method, headers: headers
         }).then((response) => {
             return response.json();
         });
     }
-
+ 
     private authenticateWithPublicToken(){
         return VimeoAuthorization.getUnauthenticatedAccessToken().then((response) => {
             this.authToken = response;
@@ -41,6 +48,13 @@ class ApiClientService {
         return this.authToken != null;
     }
     
+    private buildQueryString(query: {[key: string]: string}){
+        return Object.keys(query)
+        .filter((_key) => { return query[_key] != null })
+        .map((key) => {
+            return `${key}=${query[key]}`
+        }).join("&");
+    }
 }
 
 export const ApiClient = new ApiClientService();
