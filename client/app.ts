@@ -32,7 +32,7 @@ export class App {
     constructor(params:{root: selector, templates: Templates}){
         this.root = params.root; 
         this.templates = params.templates;
-        this.debouncedFetchResults = lodash.debounce(this.fetchResults, 100);
+        this.debouncedFetchResults = lodash.debounce(this.fetchResults, 250);
         this.init();
         this.search();
     }
@@ -107,6 +107,7 @@ export class App {
             query: this.appModel.filterSearchTerm || null,
             page: page || null,
             direction: 'desc',
+            sort: 'likes'
             },
             this.appModel.filterPopularUsers
         ).then((response) => {
