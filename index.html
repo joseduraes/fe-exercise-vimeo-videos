@@ -11,14 +11,14 @@
                     <div class="row">
                         <div class="col-xs-12 col-md-12">
                             <form class="navbar-form navbar-left">
-                                <div class="input-group">
+                                <div class="input-group search__search-option">
                                     <input type="text" class="form-control" placeholder="Search in video description..." v-model="filterSearchTerm"/>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button" v-on:click="search" v-bind:disabled="isLoading">Go</button>
                                     </span>
                                 </div>
                                 <div class="form-group">
-                                    <div class="checkbox">
+                                    <div class="checkbox search__search-option">
                                         <span for="selectMaxResults">Results Per Page</span>
                                         <select class="form-control" id="selectMaxResults" v-model="resultsPerPage">
                                             <option>10</option>
@@ -26,7 +26,7 @@
                                             <option>50</option>
                                         </select>
                                     </div>
-                                    <div class="checkbox">
+                                    <div class="checkbox search__search-option">
                                         <label>
                                         <input type="checkbox" v-model="filterPopularUsers"> Filter by users with > 10 likes
                                         </label>
@@ -39,8 +39,8 @@
             </nav>
             <nav class="navbar navbar-default navbar-fixed-bottom">
                 <div class="container-fluid">
-                    <nav aria-label="...">
-                        <ul class="pager">
+                    <nav aria-label="pagination">
+                        <ul class="pager"  v-if="results && results.paging">
                             <li v-if='results && results.paging && results.paging.previous' class="previous"><button class="btn btn-primary" v-bind:disabled="isLoading" v-on:click="goToPreviousPage"><span aria-hidden="true">&larr;</span> Previous</button></li>
                             <li>X-Y of {{ results.total }} results.</li>
                             <li v-if='results && results.paging && results.paging.next' class="next"><button class="btn btn-primary" v-bind:disabled="isLoading" v-on:click="goToNextPage">Next <span aria-hidden="true">&rarr;</span></button></li>
@@ -49,19 +49,24 @@
                 </div>
             </nav>
             <section class="content">
-                <div class="row" v-for="(item, index) in results.data">
-                    <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                        <img class="media-object" src="http://placehold.it/64x64s" alt="...">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading"><a href="#">{{ item.name }}</a></h4>
-                        <p><a href="#">John Doe<a/><em></p>
-                        <p>{{ item.description }}</p>
-                        <p>Times played: {{ item.stats.plays }}. Comments: {{ item.metadata.connections.comments.total }}. Likes: {{ item.metadata.connections.likes.total }}</p>
-                    </div>
+                <div class="row" v-if="results && results.total == 0">
+                    <p class="bg-primary info-box">No results available</p>
+                </div>
+                <div v-if="results && results.data">
+                    <div class="row" v-for="(item, index) in getFilteredVideoList()" >
+                        <div class="media">
+                        <div class="media-left">
+                            <a href="#">
+                            <img class="media-object" src="http://placehold.it/64x64s" alt="...">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading"><a href="#">{{ item.name }}</a></h4>
+                            <p><a href="#">John Doe<a/><em></p>
+                            <p>{{ item.description }}</p>
+                            <p>Times played: {{ item.stats.plays }}. Comments: {{ item.metadata.connections.comments.total }}. Likes: {{ item.metadata.connections.likes.total }}</p>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>

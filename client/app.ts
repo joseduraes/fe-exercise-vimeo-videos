@@ -1,6 +1,7 @@
 import * as Vue from 'vue';
 import { Videos } from './services/videos';
 import { VideosGetResponse } from './models/VideosGetResponse';
+import { VideoInfo } from './models/VideoInfo';
 
 type selector = string;
 
@@ -46,16 +47,19 @@ export class App {
                     return this.search();
                 },
                 goToNextPage: () => {   
-                    this.goToNextPage();
+                    return this.goToNextPage();
                 },
                 goToPreviousPage: () => {
-                    this.goToPreviousPage();
+                    return this.goToPreviousPage();
                 },
                 hasPreviousPage: () => {
-                    this.hasPreviousPage();
+                    return this.hasPreviousPage();
                 },
                 hasNextPage: () => {
-                    this.hasNextPage();
+                    return this.hasNextPage();
+                },
+                getFilteredVideoList: (results: VideosGetResponse) => {
+                    return this.getFilteredVideoList();
                 }
             }
         });
@@ -79,6 +83,20 @@ export class App {
     private handleResultsFinishedLoading = () => {
         this.app.$data['isLoading'] = false; 
         window.scrollTo(0, 0);
+    }
+
+    private getFilteredVideoList(){
+        if (this.app.$data['filterPopularUsers']){
+            return App.filterVideosFromPopularUsers(this.app.$data['results'].data);   
+        }
+        return this.app.$data['results'].data;
+    }
+
+    private static filterVideosFromPopularUsers(videosList: VideoInfo[]){
+
+        return videosList.filter((video) => {
+            return video.user.metadata.connections.likes.total > 10
+        })
     }
 
     private goToPreviousPage = () => {

@@ -10,7 +10,7 @@ class VideosService {
         this.baseUrl = params.baseUrl;
     }
 
-    public get(params?: VideosGetRequest): Promise<VideosGetResponse>{
+    public get(params: VideosGetRequest): Promise<VideosGetResponse>{
         
         return ApiClient.makeRequest(
             this.baseUrl, {
