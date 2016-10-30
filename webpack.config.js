@@ -22,6 +22,7 @@ module.exports = {
             },
             { test: /\.tsx?$/, loader: 'ts-loader'},
             { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+            { test: /\.json$/, loader: "json-loader" },
             {
                 extensions: ['ttf', 'eot', 'svg', 'cur'],
                 test: /\.(ttf|eot|svg|cur)(\?v=[0-9]\.[0-9]\.[0-9])?$/,

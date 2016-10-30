@@ -49,11 +49,11 @@
                 </div>
             </nav>
             <section class="content">
-                <div class="row" v-if="results && results.total == 0">
+                <div class="row" v-if="results && !results.data">
                     <p class="bg-primary info-box">No results available</p>
                 </div>
                 <div v-if="results && results.data">
-                    <div class="row" v-for="(item, index) in getFilteredVideoList()" >
+                    <div class="row" v-for="(item, index) in results.data" >
                         <div class="media">
                         <div class="media-left">
                             <a href="#">

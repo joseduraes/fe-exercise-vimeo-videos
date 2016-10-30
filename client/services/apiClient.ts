@@ -1,5 +1,5 @@
 import { VimeoAuthorization, AccessTokenResponse } from './authorization';
-import { Videos } from './videos';
+import { VideosApi } from './videos/VideosApi';
 
 interface RequestParams {
     requiresAuth: boolean

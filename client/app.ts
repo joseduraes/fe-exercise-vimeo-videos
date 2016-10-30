@@ -1,5 +1,5 @@
 import * as Vue from 'vue';
-import { Videos } from './services/videos';
+import { VideosMockApi as Videos } from './services/videos/VideosMockApi';
 import { VideosGetResponse } from './models/VideosGetResponse';
 import { VideoInfo } from './models/VideoInfo';
 
@@ -57,46 +57,42 @@ export class App {
                 },
                 hasNextPage: () => {
                     return this.hasNextPage();
+                }
+            },
+            watch: {
+                filterPopularUsers: (val, oldVal) => {
+                    return this.search();
                 },
-                getFilteredVideoList: (results: VideosGetResponse) => {
-                    return this.getFilteredVideoList();
+                resultsPerPage: (val, oldVal) => {
+                    return this.search(null, true);
                 }
             }
         });
     }
 
-    private search = (page?: number) => {
+    private search = (page?: number, noScroll?: boolean) => {
         this.app.$data['isLoading'] = true; 
 
-        Videos.get({
+        Videos.getVideos({
             per_page: this.app.$data['resultsPerPage'],
             query: this.app.$data['filterSearchTerm'] || null,
-            page: page || null
-        }).then((response) => {
+            page: page || null,
+            direction: 'desc',
+            },
+            this.app.$data['filterPopularUsers']
+        ).then((response) => {
             this.app.$data['results'] = response;
-            this.handleResultsFinishedLoading();
+            this.handleResultsFinishedLoading(noScroll);
         }).catch(() => {
             this.handleResultsFinishedLoading();
         });
     }
 
-    private handleResultsFinishedLoading = () => {
+    private handleResultsFinishedLoading = (noScroll?: boolean) => {
         this.app.$data['isLoading'] = false; 
-        window.scrollTo(0, 0);
-    }
-
-    private getFilteredVideoList(){
-        if (this.app.$data['filterPopularUsers']){
-            return App.filterVideosFromPopularUsers(this.app.$data['results'].data);   
+        if (!noScroll){
+            window.scrollTo(0, 0);
         }
-        return this.app.$data['results'].data;
-    }
-
-    private static filterVideosFromPopularUsers(videosList: VideoInfo[]){
-
-        return videosList.filter((video) => {
-            return video.user.metadata.connections.likes.total > 10
-        })
     }
 
     private goToPreviousPage = () => {
