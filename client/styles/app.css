@@ -1,5 +1,5 @@
 .content {
-    margin-top: 200px;
+    margin-top: 250px;
     padding-bottom: 150px;
     padding-right: 10px;
     padding-left: 10px;
@@ -42,5 +42,16 @@
     .search__search-option {
         width: 100%;
     }
+}
+
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+.loading button {
+    opacity: 0.9;
+    transform: translate(-50%, -50%);
 }
 

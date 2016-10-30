@@ -25,6 +25,9 @@ class VimeoAuthorizationService {
             },
             body: 'grant_type=client_credentials'
         }).then((response) => {
+            if (response.status >= 400){
+                throw(`authentication failed: ${response.statusText}`);
+            }
             return response.json();
         })
     }

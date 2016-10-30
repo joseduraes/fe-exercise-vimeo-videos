@@ -1,8 +1,10 @@
 import * as Vue from 'vue';
-import { VideosMockApi as Videos } from './services/videos/VideosMockApi';
+import { VideosMockApi } from './services/videos/VideosMockApi';
 import { VideosGetResponse } from './models/VideosGetResponse';
 import { VideoInfo } from './models/VideoInfo';
 import * as lodash from 'lodash';
+import { VideosApiSpec } from './services/videos/VideosApiSpec';
+import { VideosApi } from './services/videos/VideosApi';
 
 type selector = string;
 
@@ -11,11 +13,13 @@ interface Templates {
 }
 
 interface AppModel {
+    errorMessage: string
     resultsPerPage: number
     filterSearchTerm: string
     filterPopularUsers: boolean
     isLoading: boolean
     results: VideosGetResponse
+    resultsBackend: "mock" | "vimeo"
 }
 
 export class App {
@@ -23,11 +27,13 @@ export class App {
     private app: Vue;
     private root: selector;
     private templates: Templates;
+    private debouncedFetchResults;
 
     constructor(params:{root: selector, templates: Templates}){
         this.root = params.root; 
         this.templates = params.templates;
 
+        this.debouncedFetchResults = lodash.debounce(this.fetchResults, 100);
         this.init();
         this.search();
     }
@@ -37,7 +43,9 @@ export class App {
             el: this.root,
             template: this.templates.videoSearch,
             data: {
+                errorMessage: '',
                 resultsPerPage: 10,
+                resultsBackend: "mock", 
                 filterSearchTerm: '',
                 filterPopularUsers: false,
                 isLoading: false,
@@ -71,15 +79,27 @@ export class App {
                 },
                 resultsPerPage: (val, oldVal) => {
                     return this.search(null, true);
+                },
+                resultsBackend: (val, oldVal) => {
+                    return this.search();
                 }
             }
         });
     }
 
     private search = (page?: number, noScroll?: boolean) => {
-        this.app.$data['isLoading'] = true; 
 
-        Videos.getVideos({
+        if (this.app.$data['resultsBackend'] == 'mock'){
+            return this.fetchResults(VideosMockApi, page, noScroll);
+        }
+        return this.debouncedFetchResults(VideosApi, page, noScroll);
+    }
+
+    private fetchResults(videoSrv: VideosApiSpec, page: number, noScroll: boolean){
+        this.app.$data['isLoading'] = true; 
+        this.app.$data['errorMessage'] = ''; 
+        
+        return videoSrv.getVideos({
             per_page: this.app.$data['resultsPerPage'],
             query: this.app.$data['filterSearchTerm'] || null,
             page: page || null,
@@ -89,7 +109,9 @@ export class App {
         ).then((response) => {
             this.app.$data['results'] = response;
             this.handleResultsFinishedLoading(noScroll);
-        }).catch(() => {
+        }).catch((err) => {
+            this.app.$data['results'] = [];
+            this.app.$data['errorMessage'] = err;
             this.handleResultsFinishedLoading();
         });
     }

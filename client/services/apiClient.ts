@@ -11,6 +11,7 @@ interface RequestParams {
 class ApiClientService {
 
     private authToken: AccessTokenResponse;
+    private authenticationInProgress?: Promise<void>;
 
     public makeRequest(url, params: RequestParams){
 
@@ -21,7 +22,10 @@ class ApiClientService {
 
         if (params.requiresAuth && !this.isAuthenticated()){
             return this.authenticateWithPublicToken().then(
-                () => { return this.makeRequest(url, params) })
+                () => { return this.makeRequest(url, params)
+            }).catch((err) => {
+                throw err;
+            });
         }
 
         if (params.query){
@@ -36,12 +40,20 @@ class ApiClientService {
         });
     }
  
-    private authenticateWithPublicToken(){
-        return VimeoAuthorization.getUnauthenticatedAccessToken().then((response) => {
+    private authenticateWithPublicToken(): Promise<any>{
+
+        if(this.authenticationInProgress != null){
+            return this.authenticationInProgress;
+        }
+
+        this.authenticationInProgress = VimeoAuthorization.getUnauthenticatedAccessToken().then((response) => {
+            this.authenticationInProgress = null;
             this.authToken = response;
-        }).catch(() => {
-            throw('authentication failed')
+        }).catch((err) => {
+            this.authenticationInProgress = null;
+            throw(err)
         });
+        return this.authenticationInProgress;
     }
   
     private isAuthenticated(){
