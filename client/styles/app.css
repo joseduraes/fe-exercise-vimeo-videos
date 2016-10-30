@@ -37,3 +37,10 @@
         margin-right: 20px;
     }
 }
+
+@media(max-width: 768px) {
+    .search__search-option {
+        width: 100%;
+    }
+}
+

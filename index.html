@@ -10,12 +10,9 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-xs-12 col-md-12">
-                            <form class="navbar-form navbar-left">
+                            <div class="navbar-form navbar-left">
                                 <div class="input-group search__search-option">
-                                    <input type="text" class="form-control" placeholder="Search in video description..." v-model="filterSearchTerm"/>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" v-on:click="search" v-bind:disabled="isLoading">Go</button>
-                                    </span>
+                                    <input type="text" class="form-control" placeholder="Search for videos" v-model="filterSearchTerm"/>
                                 </div>
                                 <div class="form-group">
                                     <div class="checkbox search__search-option">
@@ -32,7 +29,7 @@
                                         </label>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
